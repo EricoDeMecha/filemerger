@@ -1,6 +1,6 @@
 # FileMerger
 
-A command-line utility to merge multiple files into a single text file, with support for file filtering by extension and selective folder/file inclusion/exclusion.
+A command-line utility to merge multiple files into a single text file, with support for file filtering by extension and recursive folder traversal.
 
 ## Installation
 
@@ -30,33 +30,44 @@ pip install -e .
 ## Usage
 
 ```bash
-filemerger [OPTIONS]
+filemerger [OPTIONS] FOLDERS...
 ```
 
 ### Options
-- `-r, --root`: Root directory (default: current directory)
 - `-o, --output`: Output filename (default: merged_contents.txt)
 - `-e, --extensions`: File extensions to include (default: .cpp .h .txt .json)
-- `-m, --merge`: Specific files to merge (relative paths)
-- `-i, --ignore_files`: Files to ignore
-- `-I, --ignore_folders`: Folders to ignore (default: cmake-build-debug, build, mbed-os, cmake_build)
-- `-M, --merge_folders`: Specific folders to merge
+- `-i, --ignore-files`: Files to ignore
+- `-I, --ignore-folders`: Folders to ignore (default: cmake-build-debug, build, mbed-os, cmake_build)
 
 ### Examples
 
 ```bash
-# Merge all .cpp and .h files in current directory
-filemerger -e .cpp .h
+# Merge all .cpp and .h files from specific folders
+filemerger hmi/gfx drivers/display -e .cpp .h
 
-# Merge specific files from src directory
-filemerger -r src -m main.cpp utils.h
+# Merge using wildcards to include subfolders
+filemerger hmi/gfx/* drivers/display/* -e .h .cpp .txt
 
-# Merge files excluding test folder
-filemerger -I tests -o merged.txt
+# Merge with specific extensions and ignore patterns
+filemerger src include -e .cpp .h -I build test
 
-# Merge only files in src and include folders
-filemerger -M src include
+# Merge only header files from multiple folders
+filemerger src/* include/* lib/* -e .h
 ```
+
+## Features
+
+- Recursive folder traversal
+- Multiple file extension support
+- Wildcard pattern support for folder paths
+- Configurable file and folder exclusions
+- Clear terminal output with merge summary
+- UTF-8 file encoding support
+
+## Requirements
+- Python ≥ 3.7
+- Click library
+- pipx or python3-venv (for installation)
 
 ## Development
 
@@ -66,6 +77,7 @@ cd filemerger
 pipx install -e .
 ```
 
-## Requirements
-- Python ≥ 3.6
-- pipx or python3-venv (for installation)
+## Notes
+- Binary files are automatically detected and skipped
+- File paths in the output file are preserved relative to the source folders
+- The merge summary is displayed in the terminal after successful execution

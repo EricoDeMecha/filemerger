@@ -1,3 +1,19 @@
 [build-system]
 requires = ["setuptools>=45", "wheel"]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "filemerger"
+version = "0.1.0"
+description = "A tool to merge multiple files recursively"
+requires-python = ">=3.7"
+dependencies = [
+    "click>=8.0.0",
+]
+
+[project.scripts]
+filemerger = "filemerger.merge_files:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["filemerger*"]
